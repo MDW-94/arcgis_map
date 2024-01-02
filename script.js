@@ -80,4 +80,12 @@ require([
 
     // https://sentry.io/answers/undo-the-most-recent-local-git-commits/#:~:text=The%20Solution,commits%20without%20losing%20any%20work.
 
+    // Things to do:
+    // 1 - Try and convert into Typescript
+    // 2 - Find multiple datasets that can help you make your map more interesting
+    // 3 - 
+
+
+// https://developers.arcgis.com/javascript/latest/tutorials/add-a-point-line-and-polygon/
+
 
