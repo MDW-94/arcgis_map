@@ -1,3 +1,5 @@
+import API_KEY from '.env';
+
 require([
     "esri/config",
     "esri/Map", 
@@ -15,7 +17,7 @@ require([
         Track,
         Graphic) => {
 
-        esriConfig.apiKey = "AAPK5a4ef80094fe4b97adc491555c25fab7_B5IjF1tCDRw26KGoCLrauHItctUjCTgaL_4JQaCzu9ey2pcBEa4N1fgaiPhseVx"
+        esriConfig.apiKey = API_KEY;
 
         const map = new Map({
             basemap: "topo-vector"
@@ -59,3 +61,12 @@ require([
 
 
     });
+
+    //  https://spatialreserves.wordpress.com/
+    // https://spatialreserves.wordpress.com/2019/02/18/the-top-10-most-useful-geospatial-data-portals-revisited/
+
+    // https://github.com/orgs/community/discussions/57070
+
+    // https://sentry.io/answers/undo-the-most-recent-local-git-commits/#:~:text=The%20Solution,commits%20without%20losing%20any%20work.
+
+
