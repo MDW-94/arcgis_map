@@ -1,5 +1,3 @@
-import API_KEY from '.env';
-
 require([
     "esri/config",
     "esri/Map", 
@@ -7,7 +5,9 @@ require([
     "esri/widgets/Locate",
 
     "esri/widgets/Track",
-    "esri/Graphic"
+    "esri/Graphic",
+
+    "esri/layers/FeatureLayer"
 
     ], (esriConfig, 
         Map, 
@@ -15,9 +15,11 @@ require([
         Locate,
         
         Track,
-        Graphic) => {
+        Graphic,
+        
+        FeatureLayer) => {
 
-        esriConfig.apiKey = API_KEY;
+        esriConfig.apiKey = "AAPK5a4ef80094fe4b97adc491555c25fab7_B5IjF1tCDRw26KGoCLrauHItctUjCTgaL_4JQaCzu9ey2pcBEa4N1fgaiPhseVx";
 
         const map = new Map({
             basemap: "topo-vector"
@@ -29,6 +31,13 @@ require([
             center: [-3.5, 56.255],
             zoom: 8.75
         });
+
+        const layer = new FeatureLayer({
+            url: "https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0",
+            opacity: 0.5
+        });
+
+        map.addMany([layer]);
 
         const locate = new Locate({
             view: view,
@@ -58,6 +67,8 @@ require([
         });
 
         view.ui.add(track, 'top-left');
+
+        
 
 
     });
