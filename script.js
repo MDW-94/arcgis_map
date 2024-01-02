@@ -22,7 +22,7 @@ require([
         esriConfig.apiKey = "AAPK5a4ef80094fe4b97adc491555c25fab7_B5IjF1tCDRw26KGoCLrauHItctUjCTgaL_4JQaCzu9ey2pcBEa4N1fgaiPhseVx";
 
         const map = new Map({
-            basemap: "topo-vector"
+            basemap: "arcgis/topographic"
         });
 
         const view = new MapView({
@@ -37,11 +37,22 @@ require([
             opacity: 0.5
         });
 
-        map.addMany([layer]);
+        const layerPromise = new Promise(function(myResolve, myReject){
+            layer.load();
+
+            myResolve();
+            myReject();
+        })
+
+        layerPromise.then(map.addMany([layer]))
+
+        
+        
+
+        
 
         const locate = new Locate({
             view: view,
-            useHeadingEnabled: false,
             goToOverride: function(view, options){
                 options.target.scale = 0; // add option to zoom in or not? Pop-up feature
                 return view.goTo(options.target)
@@ -63,7 +74,6 @@ require([
                     }
                 }
             }),
-            useHeadingEnabled: false
         });
 
         view.ui.add(track, 'top-left');
