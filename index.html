@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta name="description" content="Traditional method for loading ArcGIS SDKs for Javascript into an application">
+
+        <title>ArcGIS - Map Application</title>
+
+        <!-- The esri.css file contains the CSS for various widgets, including CSS for the map. Because all CSS is in a single file, retrieving CSS for the API is done in a single request. Reducing the number of http requests is one way for apps to improve performance. -->
+
+        <style>
+            html,
+            body,
+            #viewDiv {
+                padding: 0;
+                margin: 0;
+                height: 98%;
+                width: 100%;
+            } 
+            /* selector targets three elements setting them to the styles specified */
+        </style>
+        
+        <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css" type="text/css">
+        <script type="text/javascript" src="https://js.arcgis.com/4.28/"></script>
+        <script type="text/javascript" src="script.js"></script>
+
+    </head>
+    <body>
+        <div id="viewDiv"></div>
+        <p style="text-align: center;">Pharmaceutical application for displaying data regarding medication and user location</p>
+    </body>
+</html>
+
+<!-- With the script.js appropriately setup plus the viewport settings when displaying the html file in the browser we can see the ArcGIS map takes up the whole viewport, the html body has been replaced with the Esri UI -->
