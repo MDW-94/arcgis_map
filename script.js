@@ -2,26 +2,36 @@ require([
     "esri/config",
     "esri/Map", 
     "esri/views/MapView",
-    "esri/widgets/Locate",
 
+    "esri/widgets/Locate",
     "esri/widgets/Track",
+
     "esri/Graphic",
 
     "esri/layers/FeatureLayer",
+
+    "esri/widgets/LayerList",
+    "esri/layers/TileLayer",
+    "esri/widgets/Swipe",
 
     "esri/geometry/Extent"
 
     ], (esriConfig, 
         Map, 
         MapView,
+
         Locate,
-        
         Track,
+
         Graphic,
         
         FeatureLayer,
+
+        LayerList,
+        TileLayer,
+        Swipe,
         
-        Extent) => {
+        ) => {
 
         esriConfig.apiKey = "AAPK5a4ef80094fe4b97adc491555c25fab7_B5IjF1tCDRw26KGoCLrauHItctUjCTgaL_4JQaCzu9ey2pcBEa4N1fgaiPhseVx";
 
@@ -29,51 +39,49 @@ require([
             basemap: "arcgis/topographic"
         });
 
-        const extent = new Extent({
-            xmin: -1,
-            ymin: 60,
-            xmax: -1.4,
-            ymax: 60.6,
-            spatialReference: {
-                wkid: 4326
-            }
-        })
-
         const view = new MapView({
             container: "viewDiv",
             map: map,
             center: [-1.25, 60.255],
             zoom: 9,
+            constraints: {
+                minScale: 9000,
+                maxScale: 1600000,
+                snapToZoom: false
+            }
         });
 
         // -1.25, 60.255 original coords
-        // -0.5, 61.5
-
-        
-
-        view.extent = extent;
-
-        view.constraints = {
-            extent: extent,
-            maxZoom: 9
-        }
-
-
-
 
         const layer = new FeatureLayer({
             url: "https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0",
             opacity: 0.5
         });
 
-        const layerPromise = new Promise(function(myResolve, myReject){
-            layer.load();
+        Promise.all([layer.load()])
+        .then(() => {
+            map.addMany([layer])
+        })
+        .catch(error => console.error('error loading layer'))
 
-            myResolve();
-            myReject();
+        // Promise to load layer with catchment incase of error
+
+        const tileLayer1 = new TileLayer({
+            url: "",
+        })
+        map.add(tileLayer1)
+
+        const swipe = new Swipe({
+            leadingLayers: [],
+            trailingLayers: [],
+            position: 85,
+            view: view
         })
 
-        layerPromise.then(map.addMany([layer]))
+        view.ui.add(swipe)
+
+
+        
 
         
         
