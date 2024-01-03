@@ -92,8 +92,8 @@ require([
             center: [-1.25, 60.255],
             zoom: 9,
             constraints: {
-                minScale: 9000,
-                maxScale: 1600000,
+                minScale: 8000,
+                maxScale: 2000000,
                 snapToZoom: false
             },
             container: appConfig.container
@@ -150,6 +150,7 @@ require([
 
         function createView(params, type){
             let view;
+
             if(type === '2d'){
                 view = new MapView(params);
 
@@ -163,7 +164,7 @@ require([
                 view.ui.add(swipe);
 
                 return view;
-                
+
             } else {
                 view = new SceneView(params);
             }
@@ -239,6 +240,16 @@ require([
 // https://portal.opentopography.org/dataspace/dataset?opentopoID=OTDS.112021.4326.3
 
 // https://portal.opentopography.org/datasetMetadata?otCollectionID=OT.112018.3413.1
+
+// https://codepen.io/pen?editors=1010
+// https://developers.arcgis.com/javascript/latest/sample-code/widgets-swipe/
+
+
+// https://www.arcgis.com/home/item.html?id=e8d799074d4d4b04b4f54577bd057758
+
+//https://developers.arcgis.com/javascript/latest/proxies/
+
+
 
 
 
