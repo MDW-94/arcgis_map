@@ -56,10 +56,10 @@ require([
             basemap: "arcgis/topographic"
         });
 
-        const view_ui = new MapView({
-            container: "viewDiv",
-            map: map1,
-        });
+        // const view_ui = new MapView({
+        //     container: "viewDiv",
+        //     map: map1,
+        // });
 
 
            // 2D Settings
@@ -75,20 +75,14 @@ require([
             })
             .catch(error => console.error('error loading layer'));
 
-        const swipe = new Swipe({
-            leadingLayers: [],
-            trailingLayers: [],
-            position: 85,
-            view: view_ui
-        })
 
-        view_ui.ui.add(swipe)
+        // view_ui.ui.add(swipe)
 
         // Promise to load layer with catchment incase of error
 
      
         const appConfig = {
-            mapView: view_ui,
+            mapView: null,
             sceneView: null,
             activeView: null,
             container: "viewDiv"
@@ -158,7 +152,18 @@ require([
             let view;
             if(type === '2d'){
                 view = new MapView(params);
+
+                const swipe = new Swipe({
+                    leadingLayers: [],
+                    trailingLayers: [],
+                    position: 85,
+                    view: view
+                })
+
+                view.ui.add(swipe);
+
                 return view;
+                
             } else {
                 view = new SceneView(params);
             }
