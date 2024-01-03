@@ -1,7 +1,11 @@
 require([
     "esri/config",
+
     "esri/Map", 
     "esri/views/MapView",
+
+    "esri/views/SceneView",
+    "esri/WebScene",
 
     "esri/widgets/Locate",
     "esri/widgets/Track",
@@ -12,13 +16,19 @@ require([
 
     "esri/widgets/LayerList",
     "esri/layers/TileLayer",
+    "esri/layers/ImageryLayer",
     "esri/widgets/Swipe",
+
+    // "esri/layers/ArcGISImageServiceLayer",
 
     "esri/geometry/Extent"
 
     ], (esriConfig, 
         Map, 
         MapView,
+
+        SceneView,
+        WebScene,
 
         Locate,
         Track,
@@ -29,64 +39,151 @@ require([
 
         LayerList,
         TileLayer,
+        ImageryLayer,
         Swipe,
+
+        // ArcGISImageServiceLayer
         
         ) => {
 
         esriConfig.apiKey = "AAPK5a4ef80094fe4b97adc491555c25fab7_B5IjF1tCDRw26KGoCLrauHItctUjCTgaL_4JQaCzu9ey2pcBEa4N1fgaiPhseVx";
 
-        const map = new Map({
+        // esriConfig.request.proxyUrl = "https://elevation2.arcgis.com/arcgis/rest/services/Polar/ArcticDEM/ImageServer"
+
+        const switchButton = document.getElementById("switch-btn");
+
+        const map1 = new Map({
             basemap: "arcgis/topographic"
         });
 
-        const view = new MapView({
+        const view_ui = new MapView({
             container: "viewDiv",
-            map: map,
+            map: map1,
+        });
+
+
+           // 2D Settings
+      
+        const layer = new FeatureLayer({
+            url: "https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0",
+            opacity: 0.5
+        });
+
+            Promise.all([layer.load()])
+            .then(() => {
+                map1.addMany([layer])
+            })
+            .catch(error => console.error('error loading layer'));
+
+        const swipe = new Swipe({
+            leadingLayers: [],
+            trailingLayers: [],
+            position: 85,
+            view: view_ui
+        })
+
+        view_ui.ui.add(swipe)
+
+        // Promise to load layer with catchment incase of error
+
+     
+        const appConfig = {
+            mapView: view_ui,
+            sceneView: null,
+            activeView: null,
+            container: "viewDiv"
+        }
+
+        const initialViewParams = {
             center: [-1.25, 60.255],
             zoom: 9,
             constraints: {
                 minScale: 9000,
                 maxScale: 1600000,
                 snapToZoom: false
-            }
-        });
+            },
+            container: appConfig.container
+        }
 
+
+        // 3D Settings
+
+        const scene = new WebScene({
+            portalItem: { // autocasts as new PortalItem()
+              id: "625455b01ad843ecbdd8ad8f5f71acfc"  // ID of the WebScene on arcgis.com
+            }
+          });
+
+
+
+        // create 2D view and set to active
+        appConfig.mapView = createView(initialViewParams, "2d")
+        appConfig.mapView.map = map1
+        appConfig.activeView = appConfig.mapView
+
+        // create 3D view, won't initialize until selected
+        initialViewParams.container = null;
+        initialViewParams.map = scene;
+        appConfig.sceneView = createView(initialViewParams, '3d');
+
+        // Switches the view from 2D to 3D each time the button is clicked
+        switchButton.addEventListener("click", () => {
+            switchView();
+        })
+
+        // Switches the view from 2D to 3D and vice versa
+        function switchView() {
+            const is3D = appConfig.activeView.type === '3d';
+            const activeViewpoint = appConfig.activeView.viewpoint.clone();
+
+        // remove the reference to the container for the previous view
+        appConfig.activeView.container = null;
+
+        if(is3D){
+            // if the input view is a SceneView, set the viewpoint on the mapView instance. Set the container
+            // on the mapView and flag it as the active view
+            appConfig.mapView.viewpoint = activeViewpoint;
+            appConfig.mapView.container = appConfig.container;
+            appConfig.activeView = appConfig.mapView;
+            switchButton.value = '3D';
+        } else {
+            appConfig.sceneView.viewpoint = activeViewpoint;
+            appConfig.sceneView.container = appConfig.container;
+            appConfig.activeView = appConfig.sceneView;
+            switchButton.value = '2D';
+        }
+        }
+
+        function createView(params, type){
+            let view;
+            if(type === '2d'){
+                view = new MapView(params);
+                return view;
+            } else {
+                view = new SceneView(params);
+            }
+            return view;
+        }
+
+
+      
         // -1.25, 60.255 original coords
 
-        const layer = new FeatureLayer({
-            url: "https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0",
-            opacity: 0.5
-        });
 
-        Promise.all([layer.load()])
-        .then(() => {
-            map.addMany([layer])
-        })
-        .catch(error => console.error('error loading layer'))
+        // const tileLayer1 = new TileLayer({
+        //     url: "",
+        // })
+        // map.add(tileLayer1)
 
-        // Promise to load layer with catchment incase of error
+        // const imageryLayer = new ImageryLayer({
+        //     // itemId: "6fedfbe38d9d4fc0a2b24b715d40017c"
+        //     url: "https://elevation2.arcgis.com/arcgis/rest/services/Polar/AntarcticDEM/ImageServer"
+        // })
+        // map.add(imageryLayer)
 
-        const tileLayer1 = new TileLayer({
-            url: "",
-        })
-        map.add(tileLayer1)
+        // const imageLayer = new ArcGISImageServiceLayer("https://elevation2.arcgis.com/arcgis/rest/services/Polar/ArcticDEM/ImageServer");
+        // map.addLayer(layer);
 
-        const swipe = new Swipe({
-            leadingLayers: [],
-            trailingLayers: [],
-            position: 85,
-            view: view
-        })
-
-        view.ui.add(swipe)
-
-
-        
-
-        
-        
-
-        
 
         // const locate = new Locate({
         //     view: view,

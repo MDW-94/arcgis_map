@@ -5,6 +5,8 @@
         <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
         <meta name="description" content="Traditional method for loading ArcGIS SDKs for Javascript into an application">
 
+        <link rel="icon" type="image/svg+xml" sizes="any" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌎</text></svg>"/>
+
         <title>ArcGIS - Map Application</title>
 
         <!-- The esri.css file contains the CSS for various widgets, including CSS for the map. Because all CSS is in a single file, retrieving CSS for the API is done in a single request. Reducing the number of http requests is one way for apps to improve performance. -->
@@ -25,6 +27,12 @@
             } 
             /* selector targets three elements setting them to the styles specified */
 
+            #uiDiv {
+                position: absolute;
+                top: 15px;
+                left: 60px;
+            }
+
             #textBox {
                 text-align: center; 
                 color: whitesmoke; 
@@ -42,10 +50,20 @@
         <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css" type="text/css">
         <script type="text/javascript" src="https://js.arcgis.com/4.28/"></script>
         <script type="text/javascript" src="script.js"></script>
-
     </head>
     <body>
         <div id="viewDiv"></div>
+
+        <div id="uiDiv">
+            <input
+            class="esri-component esri-widget--button esri-widget esri-interactive"
+            type="button"
+            id="switch-btn"
+            value="3D"
+            style="position: absolute;"
+            />
+        </div>
+
         <p id="textBox">ArcGIS Map App displaying topography of the Shetland Isles.</p>
     </body>
 </html>
