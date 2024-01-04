@@ -58,12 +58,12 @@ require([
 
         // const switchMapButton = document.getElementById("switch-map-btn")
 
+
+        // 2D Settings
         const map1 = new Map({
             basemap: "arcgis/topographic"
         });
 
-           // 2D Settings
-      
         const layer = new FeatureLayer({
             url: null,
             opacity: 0.5
@@ -74,14 +74,15 @@ require([
             portalItem: {
                 id: "8d92746635aa442aaf1103bc135bc7a9"
             }
-            // opacity: 0.5
         })
 
-        //https://portal.opentopography.org/arcticDem?opentopoID=OTSDEM.112018.3413.3
-
-        // https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0
-
-
+        const imageLayer_2 = new ImageryLayer({
+            // url: "https://elevation2.arcgis.com/arcgis/rest/services/Polar/AntarcticDEM/ImageServer",
+            portalItem: {
+                id: "e8f5557bfa4b4b5faa76e416c2721fb0"
+            }
+            // opacity: 0.5
+        })
 
         // const webmap = new WebMap({
         //     portalItem: {
@@ -98,6 +99,7 @@ require([
             // });
 
      
+        // Setting the default app configurations for switching between 2D & 3D
         const appConfig = {
             mapView: null,
             sceneView: null,
@@ -115,7 +117,6 @@ require([
             },
             container: appConfig.container
         }
-
             // -1.25, 60.255 Shetland coords
 
 
@@ -127,6 +128,7 @@ require([
             }
           });
 
+        // ---------------------------------
 
 
         // create 2D view and set to active
@@ -138,6 +140,8 @@ require([
         initialViewParams.container = null;
         initialViewParams.map = scene;
         appConfig.sceneView = createView(initialViewParams, '3d');
+
+
 
         // Switches the view from 2D to 3D each time the button is clicked
         switchButton.addEventListener("click", () => {
@@ -171,6 +175,8 @@ require([
             let view;
 
             if(type === '2d'){
+                // Render 2D Map
+
                 view = new MapView(params);
 
                 Promise.all([imageLayer.load()]) // layer.load(),
@@ -188,17 +194,18 @@ require([
                 })
                 .catch(error => console.error('Error loading layers'));
     
-            // Promise to load layer with catchment incase of error
-
-                
+                 // Promise to load layers + swipe widget with catchment incase of error
 
                 return view;
 
             } else {
+                // Render 3D Scene
                 view = new SceneView(params);
             }
             return view;
         }
+
+
 
         // ----------------------------
 
@@ -221,57 +228,6 @@ require([
         //         switchMapButton.value = 'map';
         //     }
         // }
-
-
-
-
-
-      
-    
-
-
-        // const tileLayer1 = new TileLayer({
-        //     url: "",
-        // })
-        // map.add(tileLayer1)
-
-        // const imageryLayer = new ImageryLayer({
-        //     // itemId: "6fedfbe38d9d4fc0a2b24b715d40017c"
-        //     url: "https://elevation2.arcgis.com/arcgis/rest/services/Polar/AntarcticDEM/ImageServer"
-        // })
-        // map.add(imageryLayer)
-
-        // const imageLayer = new ArcGISImageServiceLayer("https://elevation2.arcgis.com/arcgis/rest/services/Polar/ArcticDEM/ImageServer");
-        // map.addLayer(layer);
-
-
-        // const locate = new Locate({
-        //     view: view,
-        //     goToOverride: function(view, options){
-        //         options.target.scale = 0; // add option to zoom in or not? Pop-up feature
-        //         return view.goTo(options.target)
-        //     }
-        // });
-
-        // view.ui.add(locate, 'top-left');
-
-        // const track = new Track({
-        //     view: view,
-        //     graphic: new Graphic({
-        //         symbol: {
-        //             type: "simple-marker",
-        //             size: "12px",
-        //             color: "green",
-        //             outline: {
-        //                 color: "#efefef",
-        //                 width: "1.5px"
-        //             }
-        //         }
-        //     }),
-        // });
-
-        // view.ui.add(track, 'top-left');
-
     
     });
 
@@ -306,6 +262,10 @@ require([
 
 
 
-
 // https://doc.arcgis.com/en/arcgis-online/manage-data/publish-tiles.htm 
 // publish a tile service of the raster data in order to be able to bring it into the map as a feature layer using an id reference?
+
+
+//https://portal.opentopography.org/arcticDem?opentopoID=OTSDEM.112018.3413.3
+
+// https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0
