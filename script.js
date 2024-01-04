@@ -4,6 +4,8 @@ require([
     "esri/Map", 
     "esri/views/MapView",
 
+    "esri/WebMap",
+
     "esri/views/SceneView",
     "esri/WebScene",
 
@@ -26,6 +28,8 @@ require([
     ], (esriConfig, 
         Map, 
         MapView,
+
+        WebMap,
 
         SceneView,
         WebScene,
@@ -52,33 +56,46 @@ require([
 
         const switchButton = document.getElementById("switch-btn");
 
+        // const switchMapButton = document.getElementById("switch-map-btn")
+
         const map1 = new Map({
             basemap: "arcgis/topographic"
         });
 
-        // const view_ui = new MapView({
-        //     container: "viewDiv",
-        //     map: map1,
-        // });
-
-
            // 2D Settings
       
         const layer = new FeatureLayer({
-            url: "https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0",
+            url: null,
             opacity: 0.5
         });
 
-            Promise.all([layer.load()])
-            .then(() => {
-                map1.addMany([layer])
-            })
-            .catch(error => console.error('error loading layer'));
+        const imageLayer = new ImageryLayer({
+            // url: "https://elevation.arcgis.com/arcgis/rest/services/WorldElevation/Terrain/ImageServer",
+            portalItem: {
+                id: "8d92746635aa442aaf1103bc135bc7a9"
+            }
+            // opacity: 0.5
+        })
+
+        //https://portal.opentopography.org/arcticDem?opentopoID=OTSDEM.112018.3413.3
+
+        // https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0
 
 
-        // view_ui.ui.add(swipe)
 
-        // Promise to load layer with catchment incase of error
+        // const webmap = new WebMap({
+        //     portalItem: {
+        //         // id: "f317168ea86a44f9a0577dda2bf68b2d"
+        //     }
+        // })
+
+            // Promise.all([webmap.load()])
+            // .then(() => {
+            //     //
+            // })
+            // .catch(error => {
+            //     console.error("Error loading webmap", error);
+            // });
 
      
         const appConfig = {
@@ -90,14 +107,16 @@ require([
 
         const initialViewParams = {
             center: [-1.25, 60.255],
-            zoom: 9,
+            zoom: 8.5,
             constraints: {
                 minScale: 8000,
-                maxScale: 2000000,
+                maxScale: 2300000,
                 snapToZoom: false
             },
             container: appConfig.container
         }
+
+            // -1.25, 60.255 Shetland coords
 
 
         // 3D Settings
@@ -112,7 +131,7 @@ require([
 
         // create 2D view and set to active
         appConfig.mapView = createView(initialViewParams, "2d")
-        appConfig.mapView.map = map1
+        appConfig.mapView.map = map1 // Here is where the switch between 2D maps takes place switchMap()
         appConfig.activeView = appConfig.mapView
 
         // create 3D view, won't initialize until selected
@@ -130,22 +149,22 @@ require([
             const is3D = appConfig.activeView.type === '3d';
             const activeViewpoint = appConfig.activeView.viewpoint.clone();
 
-        // remove the reference to the container for the previous view
-        appConfig.activeView.container = null;
+            // remove the reference to the container for the previous view
+            appConfig.activeView.container = null;
 
-        if(is3D){
-            // if the input view is a SceneView, set the viewpoint on the mapView instance. Set the container
-            // on the mapView and flag it as the active view
-            appConfig.mapView.viewpoint = activeViewpoint;
-            appConfig.mapView.container = appConfig.container;
-            appConfig.activeView = appConfig.mapView;
-            switchButton.value = '3D';
-        } else {
-            appConfig.sceneView.viewpoint = activeViewpoint;
-            appConfig.sceneView.container = appConfig.container;
-            appConfig.activeView = appConfig.sceneView;
-            switchButton.value = '2D';
-        }
+            if(is3D){
+                // if the input view is a SceneView, set the viewpoint on the mapView instance. Set the container
+                // on the mapView and flag it as the active view
+                appConfig.mapView.viewpoint = activeViewpoint;
+                appConfig.mapView.container = appConfig.container;
+                appConfig.activeView = appConfig.mapView;
+                switchButton.value = '3D';
+            } else {
+                appConfig.sceneView.viewpoint = activeViewpoint;
+                appConfig.sceneView.container = appConfig.container;
+                appConfig.activeView = appConfig.sceneView;
+                switchButton.value = '2D';
+            }
         }
 
         function createView(params, type){
@@ -154,14 +173,24 @@ require([
             if(type === '2d'){
                 view = new MapView(params);
 
-                const swipe = new Swipe({
-                    leadingLayers: [],
-                    trailingLayers: [],
-                    position: 85,
-                    view: view
-                })
+                Promise.all([imageLayer.load()]) // layer.load(),
+                .then(() => {
+                    map1.addMany([imageLayer])
 
-                view.ui.add(swipe);
+                    const swipe = new Swipe({
+                        leadingLayers: [],
+                        trailingLayers: [imageLayer],
+                        position: 85,
+                        view: view
+                    })
+    
+                    view.ui.add(swipe);
+                })
+                .catch(error => console.error('Error loading layers'));
+    
+            // Promise to load layer with catchment incase of error
+
+                
 
                 return view;
 
@@ -171,9 +200,34 @@ require([
             return view;
         }
 
+        // ----------------------------
+
+        // id="switch-map-btn"
+        // value="WM"
+
+        // switchMapButton.addEventListener("click", () => {
+        //     switchMap();
+        // })
+
+        // function switchMap() {
+        //     const isWebMap = appConfig.mapView.map = webmap
+
+        //     if(isWebMap){
+
+        //         switchMapButton.value = 'WM';
+        //     } else {
+
+        //         appConfig.mapView.map = map1
+        //         switchMapButton.value = 'map';
+        //     }
+        // }
+
+
+
+
 
       
-        // -1.25, 60.255 original coords
+    
 
 
         // const tileLayer1 = new TileLayer({
@@ -253,4 +307,5 @@ require([
 
 
 
-
+// https://doc.arcgis.com/en/arcgis-online/manage-data/publish-tiles.htm 
+// publish a tile service of the raster data in order to be able to bring it into the map as a feature layer using an id reference?
