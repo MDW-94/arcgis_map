@@ -72,9 +72,16 @@ require([
         const imageLayer = new ImageryLayer({
             // url: "https://elevation.arcgis.com/arcgis/rest/services/WorldElevation/Terrain/ImageServer",
             portalItem: {
-                id: "8d92746635aa442aaf1103bc135bc7a9"
+                id: "431f314cce9648b4a2da85a7359ccee4"
             }
         })
+
+        // original: 431f314cce9648b4a2da85a7359ccee4
+        // my ArcGIS account: 8d92746635aa442aaf1103bc135bc7a9
+
+        // Terrain: Slope Map
+        // Source type: Elevation
+        // Pixel type: Float
 
         const imageLayer_2 = new ImageryLayer({
             // url: "https://elevation2.arcgis.com/arcgis/rest/services/Polar/AntarcticDEM/ImageServer",
@@ -186,6 +193,7 @@ require([
                     const swipe = new Swipe({
                         leadingLayers: [],
                         trailingLayers: [imageLayer],
+                        // dragLabel: "drag left or right",
                         position: 85,
                         view: view
                     })
