@@ -20,6 +20,7 @@ require([
     "esri/layers/TileLayer",
     "esri/layers/ImageryLayer",
     "esri/widgets/Swipe",
+    "esri/widgets/Legend",
 
     // "esri/layers/ArcGISImageServiceLayer",
 
@@ -45,6 +46,7 @@ require([
         TileLayer,
         ImageryLayer,
         Swipe,
+        Legend,
 
         // ArcGISImageServiceLayer
         
@@ -197,8 +199,16 @@ require([
                         position: 85,
                         view: view
                     })
+
+                    const legend = new Legend({
+                        view: view
+                    })
     
-                    view.ui.add(swipe);
+                    view.ui.add([swipe]);
+                    view.ui.add(legend, {
+                        position: 'bottom-right'
+                    });
+
                 })
                 .catch(error => console.error('Error loading layers'));
     
