@@ -21,6 +21,7 @@ require([
     "esri/layers/ImageryLayer",
     "esri/widgets/Swipe",
     "esri/widgets/Legend",
+    "esri/widgets/Expand",
 
     // "esri/layers/ArcGISImageServiceLayer",
 
@@ -47,6 +48,7 @@ require([
         ImageryLayer,
         Swipe,
         Legend,
+        Expand,
 
         // ArcGISImageServiceLayer
         
@@ -75,7 +77,10 @@ require([
             // url: "https://elevation.arcgis.com/arcgis/rest/services/WorldElevation/Terrain/ImageServer",
             portalItem: {
                 id: "431f314cce9648b4a2da85a7359ccee4"
-            }
+            },
+            // renderingRule: null,
+
+            // opacity: 0.5
         })
 
         // original: 431f314cce9648b4a2da85a7359ccee4
@@ -203,11 +208,18 @@ require([
                     const legend = new Legend({
                         view: view
                     })
+
+                    const legendExpand = new Expand({
+                        expandIcon: "layers",
+                        view: view,
+                        content: legend
+                    })
     
                     view.ui.add([swipe]);
-                    view.ui.add(legend, {
-                        position: 'bottom-right'
-                    });
+                    // view.ui.add(legend, {
+                    //     position: 'bottom-right'
+                    // });
+                    view.ui.add(legendExpand, "bottom-right")
 
                 })
                 .catch(error => console.error('Error loading layers'));
