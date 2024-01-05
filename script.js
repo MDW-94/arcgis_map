@@ -61,15 +61,17 @@ require([
 
   const switchMapButton = document.getElementById("switch-map-btn");
 
+  // const switchData = document.getElementById("switch-data-menu"); UNDER CONSTRUCTION
+
   // 2D Settings
   const map1 = new Map({
     basemap: "arcgis/topographic",
   });
 
-  const layer = new FeatureLayer({
-    url: null,
-    opacity: 0.5,
-  });
+  // const layer = new FeatureLayer({
+  //   url: null,
+  //   opacity: 0.5,
+  // });
 
   const imageLayer = new ImageryLayer({
     portalItem: {
@@ -97,7 +99,7 @@ require([
   const webmap = new WebMap({
     portalItem: {
       id: "21812b28afea4091bc57472297aa73d4",
-    }
+    },
     // f317168ea86a44f9a0577dda2bf68b2d
   });
 
@@ -118,8 +120,8 @@ require([
       snapToZoom: false,
     },
     container: appConfig.container,
+      // -1.25, 60.255 Shetland coords
   };
-  // -1.25, 60.255 Shetland coords
 
   // 3D Settings
 
@@ -127,14 +129,14 @@ require([
     portalItem: {
       // autocasts as new PortalItem()
       id: "625455b01ad843ecbdd8ad8f5f71acfc", // ID of the WebScene on arcgis.com
-    }
+    },
   });
 
   const elevLyr = new ElevationLayer({
     portalItem: {
-      id: "7029fb60158543ad845c7e1527af11e4"
-    }
-  })
+      id: "7029fb60158543ad845c7e1527af11e4",
+    },
+  });
 
   // ---------------------------------
 
@@ -176,6 +178,26 @@ require([
     }
   }
 
+  // ---------------- Under Construction
+
+  // switchData.addEventListener("change", (evt) => {
+  //   console.log(evt, "HII")
+  //   switchDataLayer(evt);
+  // });
+
+  // function switchDataLayer(evt) {
+  //   let result = imageLayer;
+  //   if (evt.target.value === "Data1") {
+  //     result = imageLayer;
+  //     return result;
+  //   }
+  //   if (evt.target.value === "Data2") {
+  //     result = imageLayer_2;
+  //     return result;
+  //   }
+  //   console.log(result)
+  // }
+
   // ----------------
 
   function createView(params, type) {
@@ -186,20 +208,24 @@ require([
 
       view = new MapView(params);
 
+      // if(appConfig.mapView.map === webmap){
+      //   webmap.addMany([imageLayer]);
+      // } else {
+        // code below
+      // }
+
       Promise.all([imageLayer.load()])
         .then(() => {
           map1.addMany([imageLayer]);
-
           const swipe = new Swipe({
             leadingLayers: [],
-            trailingLayers: [imageLayer],
-            // dragLabel: "drag left or right",
+            trailingLayers: [imageLayer], // function to switch between layers
             position: 85,
             view: view,
           });
 
           const legend = new Legend({
-            view: view
+            view: view,
           });
 
           const legendExpand = new Expand({
@@ -211,18 +237,29 @@ require([
           view.ui.add([swipe]);
 
           view.ui.add(legendExpand, "bottom-right");
+
+          // if(...){
+          //   webmap.addMany([imageLayer]);
+          // const swipe = new Swipe({
+          //   leadingLayers: [],
+          //   trailingLayers: [imageLayer], // function to switch between layers
+          //   position: 85,
+          //   view: view,
+          // });
+          // }
+          
         })
         .catch((error) => console.error(error));
 
       // Promise to load layers + swipe widget with catchment incase of error
-
       return view;
+
     } else {
       // Render 3D Scene
       view = new SceneView(params);
 
       const legend = new Legend({
-        view: view
+        view: view,
       });
 
       const legendExpand = new Expand({
@@ -232,7 +269,7 @@ require([
       });
 
       view.ui.add(legendExpand, "bottom-right");
-      appConfig.mapView.map.ground.layers.add(elevLyr);
+      // appConfig.mapView.map.ground.layers.add(elevLyr);
     }
     return view;
   }
@@ -248,7 +285,8 @@ require([
 
   function switchMap() {
     const isWebMap = (appConfig.mapView.map = webmap);
-    
+    view.ui.remove([swipe, legendExpand])
+
     if (isWebMap) {
       switchMapButton.value = "WM";
     } else {
@@ -257,22 +295,6 @@ require([
     }
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //  https://spatialreserves.wordpress.com/
 // https://spatialreserves.wordpress.com/2019/02/18/the-top-10-most-useful-geospatial-data-portals-revisited/
