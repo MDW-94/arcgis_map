@@ -206,19 +206,24 @@ require([
           });
 
           const legend = new Legend({
-            view: view,
+            view: view
           });
 
           const legendExpand = new Expand({
-            expandIcon: "layers",
+            expandIcon: "information",
             view: view,
             content: legend,
           });
 
+          const layerExpand = new Expand({
+            expandIcon: "layers",
+            view: view
+          })
+
           view.ui.add([swipe]);
-          // view.ui.add(legend, {
-          //     position: 'bottom-right'
-          // });
+
+          view.ui.add(legendExpand, "bottom-right");
+
           view.ui.add(legendExpand, "bottom-right");
         })
         .catch((error) => console.error(error));
