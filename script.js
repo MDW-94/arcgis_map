@@ -8,6 +8,7 @@ require([
 
   "esri/views/SceneView",
   "esri/WebScene",
+  "esri/layers/ElevationLayer",
 
   "esri/widgets/Locate",
   "esri/widgets/Track",
@@ -35,6 +36,7 @@ require([
 
   SceneView,
   WebScene,
+  ElevationLayer,
 
   Locate,
   Track,
@@ -55,8 +57,6 @@ require([
   esriConfig.apiKey =
     "AAPK5a4ef80094fe4b97adc491555c25fab7_B5IjF1tCDRw26KGoCLrauHItctUjCTgaL_4JQaCzu9ey2pcBEa4N1fgaiPhseVx";
 
-  // esriConfig.request.proxyUrl = "https://elevation2.arcgis.com/arcgis/rest/services/Polar/ArcticDEM/ImageServer"
-
   const switchButton = document.getElementById("switch-btn");
 
   const switchMapButton = document.getElementById("switch-map-btn");
@@ -72,49 +72,34 @@ require([
   });
 
   const imageLayer = new ImageryLayer({
-    // url: "https://elevation.arcgis.com/arcgis/rest/services/WorldElevation/Terrain/ImageServer",
     portalItem: {
       id: "431f314cce9648b4a2da85a7359ccee4",
     },
     // renderingRule: null,
-
     // opacity: 0.5
+    // original: 431f314cce9648b4a2da85a7359ccee4
+    // Terrain: Slope Map
+    // Source type: Elevation
+    // Pixel type: Float
+    // url: "https://elevation.arcgis.com/arcgis/rest/services/WorldElevation/Terrain/ImageServer",
   });
 
-  // original: 431f314cce9648b4a2da85a7359ccee4
-  // my ArcGIS account: 8d92746635aa442aaf1103bc135bc7a9
-
-  // Terrain: Slope Map
-  // Source type: Elevation
-  // Pixel type: Float
-
   const imageLayer_2 = new ImageryLayer({
-    // url: "https://elevation2.arcgis.com/arcgis/rest/services/Polar/AntarcticDEM/ImageServer",
     portalItem: {
       id: "db38a951a2b643478a942ab22cd78fc6",
     },
     // opacity: 0.5
-
     // db38a951a2b643478a942ab22cd78fc6
-
     // e8f5557bfa4b4b5faa76e416c2721fb0
+    // url: "https://elevation2.arcgis.com/arcgis/rest/services/Polar/AntarcticDEM/ImageServer",
   });
 
   const webmap = new WebMap({
     portalItem: {
-      id: "",
-    },
+      id: "21812b28afea4091bc57472297aa73d4",
+    }
+    // f317168ea86a44f9a0577dda2bf68b2d
   });
-
-  // f317168ea86a44f9a0577dda2bf68b2d
-
-  Promise.all([webmap.load()])
-    .then(() => {
-      //
-    })
-    .catch((error) => {
-      console.error("Error loading webmap", error);
-    });
 
   // Setting the default app configurations for switching between 2D & 3D
   const appConfig = {
@@ -142,8 +127,14 @@ require([
     portalItem: {
       // autocasts as new PortalItem()
       id: "625455b01ad843ecbdd8ad8f5f71acfc", // ID of the WebScene on arcgis.com
-    },
+    }
   });
+
+  const elevLyr = new ElevationLayer({
+    portalItem: {
+      id: "7029fb60158543ad845c7e1527af11e4"
+    }
+  })
 
   // ---------------------------------
 
@@ -185,6 +176,8 @@ require([
     }
   }
 
+  // ----------------
+
   function createView(params, type) {
     let view;
 
@@ -193,7 +186,7 @@ require([
 
       view = new MapView(params);
 
-      Promise.all([imageLayer.load()]) // layer.load(),
+      Promise.all([imageLayer.load()])
         .then(() => {
           map1.addMany([imageLayer]);
 
@@ -215,14 +208,7 @@ require([
             content: legend,
           });
 
-          const layerExpand = new Expand({
-            expandIcon: "layers",
-            view: view
-          })
-
           view.ui.add([swipe]);
-
-          view.ui.add(legendExpand, "bottom-right");
 
           view.ui.add(legendExpand, "bottom-right");
         })
@@ -234,6 +220,19 @@ require([
     } else {
       // Render 3D Scene
       view = new SceneView(params);
+
+      const legend = new Legend({
+        view: view
+      });
+
+      const legendExpand = new Expand({
+        expandIcon: "information",
+        view: view,
+        content: legend,
+      });
+
+      view.ui.add(legendExpand, "bottom-right");
+      appConfig.mapView.map.ground.layers.add(elevLyr);
     }
     return view;
   }
@@ -249,15 +248,31 @@ require([
 
   function switchMap() {
     const isWebMap = (appConfig.mapView.map = webmap);
-
+    
     if (isWebMap) {
       switchMapButton.value = "WM";
     } else {
+      switchMapButton.value = "Map";
       appConfig.mapView.map = map1;
-      switchMapButton.value = "map";
     }
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //  https://spatialreserves.wordpress.com/
 // https://spatialreserves.wordpress.com/2019/02/18/the-top-10-most-useful-geospatial-data-portals-revisited/
