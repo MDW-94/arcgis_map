@@ -20,9 +20,13 @@ require([
   "esri/widgets/LayerList",
   "esri/layers/TileLayer",
   "esri/layers/ImageryLayer",
+  "esri/layers/VectorTileLayer",
   "esri/widgets/Swipe",
   "esri/widgets/Legend",
   "esri/widgets/Expand",
+
+  "esri/widgets/BasemapToggle",
+  "esri/Basemap",
 
   // "esri/layers/ArcGISImageServiceLayer",
 
@@ -48,9 +52,13 @@ require([
   LayerList,
   TileLayer,
   ImageryLayer,
+  VectorTileLayer,
   Swipe,
   Legend,
-  Expand
+  Expand,
+
+  BasemapToggle,
+  Basemap
 
   // ArcGISImageServiceLayer
 ) => {
@@ -234,7 +242,16 @@ require([
             content: legend,
           });
 
+          const basemapToggle = new BasemapToggle({
+            view: view,
+            nextBasemap: "streets-relief-vector"
+          })
+
+          // watercolor: fdf540eef40344b79ead3c0c49be76a9
+
           view.ui.add([swipe]);
+
+          view.ui.add(basemapToggle, 'bottom-left');
 
           view.ui.add(legendExpand, "bottom-right");
 
@@ -284,17 +301,45 @@ require([
   });
 
   function switchMap() {
-    const isWebMap = (appConfig.mapView.map = webmap);
-    view.ui.remove([swipe, legendExpand])
+    const isWebMap = appConfig.mapView.map === webmap;
 
     if (isWebMap) {
-      switchMapButton.value = "WM";
-    } else {
       switchMapButton.value = "Map";
+      map1.removeAll();
+
+      Promise.all([imageLayer.load()])  // Load any required layers
+      .then(() => {
+        appConfig.mapView.map = map1;
+        map1.addMany([imageLayer]);
+        // Additional code to configure layers, widgets, etc. for the web map
+      })
+      .catch((error) => console.error(error));
+
+    } else {
+      switchMapButton.value = "WM";
+       // Remove web map layers
+      webmap.removeAll();
+
+      // Add 2D map layers
+      Promise.all([imageLayer.load()])  // Load any required layers
+        .then(() => {
+          appConfig.mapView.map = webmap;
+          webmap.addMany([imageLayer]);
+          // Additional code to configure layers, widgets, etc. for the 2D map
+        })
+        .catch((error) => console.error(error));
+
+      // Set the map of the 2D view to map1
       appConfig.mapView.map = map1;
     }
   }
 });
+
+// Animated raster data flow
+
+// https://www.esri.com/arcgis-blog/products/js-api-arcgis/mapping/create-an-animated-flow-visualization-with-the-arcgis-api-for-javascript/
+
+// 
 
 //  https://spatialreserves.wordpress.com/
 // https://spatialreserves.wordpress.com/2019/02/18/the-top-10-most-useful-geospatial-data-portals-revisited/
