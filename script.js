@@ -304,7 +304,7 @@ require([
     const isWebMap = appConfig.mapView.map === webmap;
 
     if (isWebMap) {
-      switchMapButton.value = "Map";
+      switchMapButton.value = "w/c";
       map1.removeAll();
 
       Promise.all([imageLayer.load()])  // Load any required layers
@@ -316,7 +316,7 @@ require([
       .catch((error) => console.error(error));
 
     } else {
-      switchMapButton.value = "WM";
+      switchMapButton.value = "Map"
        // Remove web map layers
       webmap.removeAll();
 
