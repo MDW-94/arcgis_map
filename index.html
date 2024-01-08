@@ -35,22 +35,18 @@
 
             #textBox {
                 position: relative;
-                /* bottom: 15px; */
-
                 text-align: center; 
                 color: whitesmoke; 
                 background-color: black; 
                 font-size: 1em;
-                
                 height: 3%;
                 padding: 2.5%;
                 margin: 0%;
-
                 overflow-x: scroll;
             }
         </style>
         
-        <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css" type="text/css">
+        <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/dark/main.css" type="text/css">
         <script type="text/javascript" src="https://js.arcgis.com/4.28/"></script>
         <script type="text/javascript" src="script.js"></script>
     </head>
@@ -63,21 +59,21 @@
                 type="button"
                 id="switch-btn"
                 value="3D"
-                style="position: absolute;"
+                style="position: absolute; color: whitesmoke; background-color: #202020;"
             />
             <input
                 class="esri-component esri-widget--button esri-widget esri-interactive"
                 type="button"
                 id="switch-map-btn"
                 value="&#128167;"
-                style="position: absolute; top: 35px"
+                style="position: absolute; top: 33px; color: whitesmoke; background-color: #202020;"
             />
             <select
                 class="esri-component esri-widget--button esri-widget esri-interactive"
                 
                 id="switch-data-menu"
                 
-                style="position: absolute; top: 0px; left: 35px; width: 77.5px;"
+                style="position: absolute; top: 0px; left: 40px; width: 77.5px; color: whitesmoke; background-color: #202020;"
                 >
                 <option value="Data1">Slopes</option>
                 <option value="Data2">Under Construction</option>

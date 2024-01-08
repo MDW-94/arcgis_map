@@ -10,9 +10,6 @@ require([
   "esri/WebScene",
   "esri/layers/ElevationLayer",
 
-  "esri/widgets/Locate",
-  "esri/widgets/Track",
-
   "esri/Graphic",
 
   "esri/layers/FeatureLayer",
@@ -33,26 +30,23 @@ require([
   "esri/geometry/Extent",
 ], (
   esriConfig,
+
   Map,
   MapView,
-
   WebMap,
 
   SceneView,
   WebScene,
+
   ElevationLayer,
-
-  Locate,
-  Track,
-
   Graphic,
 
   FeatureLayer,
-
   LayerList,
   TileLayer,
   ImageryLayer,
   VectorTileLayer,
+
   Swipe,
   Legend,
   Expand,
@@ -65,32 +59,21 @@ require([
   esriConfig.apiKey =
     "AAPK5a4ef80094fe4b97adc491555c25fab7_B5IjF1tCDRw26KGoCLrauHItctUjCTgaL_4JQaCzu9ey2pcBEa4N1fgaiPhseVx";
 
+  // Custom UI
   const switchButton = document.getElementById("switch-btn");
-
   const switchMapButton = document.getElementById("switch-map-btn");
-
-  // const switchData = document.getElementById("switch-data-menu"); UNDER CONSTRUCTION
+  const switchData = document.getElementById("switch-data-menu");
 
   // 2D Settings
   const map1 = new Map({
     basemap: "arcgis/topographic",
   });
 
-  // const layer = new FeatureLayer({
-  //   url: null,
-  //   opacity: 0.5,
-  // });
-
   const imageLayer = new ImageryLayer({
+    title: "Terrain: Slope Map - © Esri_JP_Content - Airbus, USGS, NGA, NASA, CGIAR, GEBCO,N Robinson, NCEAS, NLS, OS, NMA, Geodatastyrelsen, GSA and the GIS User Community",
     portalItem: {
       id: "431f314cce9648b4a2da85a7359ccee4",
-    },
-    // renderingRule: null,
-    // opacity: 0.5
-    // original: 431f314cce9648b4a2da85a7359ccee4
-    // Terrain: Slope Map
-    // Source type: Elevation
-    // Pixel type: Float
+    }
     // url: "https://elevation.arcgis.com/arcgis/rest/services/WorldElevation/Terrain/ImageServer",
   });
 
@@ -104,10 +87,27 @@ require([
     // url: "https://elevation2.arcgis.com/arcgis/rest/services/Polar/AntarcticDEM/ImageServer",
   });
 
+  const layerArray = [
+    imageLayer, 
+    imageLayer_2
+  ]
+
+  const switchDataLayer = function(evt) {
+    let result = layerArray[0];
+      if (evt == "Data1") {
+        result = layerArray[0];
+      }
+      if (evt == "Data2") {
+        result = layerArray[1];
+      }
+    return result;
+  }
+
   const webmap = new WebMap({
     portalItem: {
       id: "21812b28afea4091bc57472297aa73d4",
     },
+    // Watercolour map
     // f317168ea86a44f9a0577dda2bf68b2d
   });
 
@@ -132,7 +132,6 @@ require([
   };
 
   // 3D Settings
-
   const scene = new WebScene({
     portalItem: {
       // autocasts as new PortalItem()
@@ -146,11 +145,9 @@ require([
     },
   });
 
-  // ---------------------------------
-
   // create 2D view and set to active
   appConfig.mapView = createView(initialViewParams, "2d");
-  appConfig.mapView.map = map1; // Here is where the switch between 2D maps takes place switchMap()
+  appConfig.mapView.map = map1;
   appConfig.activeView = appConfig.mapView;
 
   // create 3D view, won't initialize until selected
@@ -186,48 +183,35 @@ require([
     }
   }
 
-  // ---------------- Under Construction
+  // ---------------- Switch Data Event Listener
+  switchData.addEventListener("change", async (evt) => {
+    const selectedValue = evt.target.value
+    const result = await switchDataLayer(selectedValue);
+    updateMapBasedOnSelectedData(result);
+  });
 
-  // switchData.addEventListener("change", (evt) => {
-  //   console.log(evt, "HII")
-  //   switchDataLayer(evt);
-  // });
-
-  // function switchDataLayer(evt) {
-  //   let result = imageLayer;
-  //   if (evt.target.value === "Data1") {
-  //     result = imageLayer;
-  //     return result;
-  //   }
-  //   if (evt.target.value === "Data2") {
-  //     result = imageLayer_2;
-  //     return result;
-  //   }
-  //   console.log(result)
-  // }
+  function updateMapBasedOnSelectedData(layer) {
+    map1.removeAll(); // Clear existing layers
+    map1.addMany([layer]); // Add selected layer to the map
+  }
 
   // ----------------
-
   function createView(params, type) {
     let view;
 
     if (type === "2d") {
       // Render 2D Map
-
       view = new MapView(params);
 
-      // if(appConfig.mapView.map === webmap){
-      //   webmap.addMany([imageLayer]);
-      // } else {
-        // code below
-      // }
-
-      Promise.all([imageLayer.load()])
+      Promise.all([switchDataLayer()]) // set to result of function switchData()
         .then(() => {
-          map1.addMany([imageLayer]);
+          if(map1){
+            map1.addMany([switchDataLayer()]);
+          }
+          
           const swipe = new Swipe({
             leadingLayers: [],
-            trailingLayers: [imageLayer], // function to switch between layers
+            trailingLayers: [switchDataLayer()], // function to switch between layers
             position: 85,
             view: view,
           });
@@ -247,28 +231,11 @@ require([
             nextBasemap: "streets-relief-vector"
           })
 
-          // watercolor: fdf540eef40344b79ead3c0c49be76a9
-
           view.ui.add([swipe]);
-
           view.ui.add(basemapToggle, 'bottom-left');
-
-          view.ui.add(legendExpand, "bottom-right");
-
-          // if(...){
-          //   webmap.addMany([imageLayer]);
-          // const swipe = new Swipe({
-          //   leadingLayers: [],
-          //   trailingLayers: [imageLayer], // function to switch between layers
-          //   position: 85,
-          //   view: view,
-          // });
-          // }
-          
+          view.ui.add(legendExpand, 'bottom-right');          
         })
         .catch((error) => console.error(error));
-
-      // Promise to load layers + swipe widget with catchment incase of error
       return view;
 
     } else {
@@ -292,10 +259,6 @@ require([
   }
 
   // ----------------------------
-
-  // id="switch-map-btn"
-  // value="WM"
-
   switchMapButton.addEventListener("click", () => {
     switchMap();
   });
@@ -305,12 +268,12 @@ require([
 
     if (isWebMap) {
       switchMapButton.value = "w/c";
-      map1.removeAll();
+      // map1.removeAll();
 
-      Promise.all([imageLayer.load()])  // Load any required layers
+      Promise.all([switchDataLayer()])
       .then(() => {
         appConfig.mapView.map = map1;
-        map1.addMany([imageLayer]);
+        map1.addMany([switchDataLayer()]);
         // Additional code to configure layers, widgets, etc. for the web map
       })
       .catch((error) => console.error(error));
@@ -321,10 +284,10 @@ require([
       webmap.removeAll();
 
       // Add 2D map layers
-      Promise.all([imageLayer.load()])  // Load any required layers
+      Promise.all([switchDataLayer()])  // Load any required layers
         .then(() => {
           appConfig.mapView.map = webmap;
-          webmap.addMany([imageLayer]);
+          webmap.addMany([switchDataLayer()]);
           // Additional code to configure layers, widgets, etc. for the 2D map
         })
         .catch((error) => console.error(error));
@@ -348,11 +311,6 @@ require([
 
 // https://sentry.io/answers/undo-the-most-recent-local-git-commits/#:~:text=The%20Solution,commits%20without%20losing%20any%20work.
 
-// Things to do:
-// 1 - Try and convert into Typescript
-// 2 - Find multiple datasets that can help you make your map more interesting
-// 3 -
-
 // https://developers.arcgis.com/javascript/latest/tutorials/add-a-point-line-and-polygon/
 
 // https://portal.opentopography.org/dataspace/dataset?opentopoID=OTDS.112021.4326.3
@@ -372,3 +330,6 @@ require([
 //https://portal.opentopography.org/arcticDem?opentopoID=OTSDEM.112018.3413.3
 
 // https://maps.gov.scot/server/rest/services/ScotGov/HealthSocialCare/MapServer/0
+
+
+// code snippets: https://carbon.now.sh
