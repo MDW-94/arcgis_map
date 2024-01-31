@@ -5,12 +5,25 @@
 
 <img width="724" alt="Screenshot 2024-01-31 at 13 19 58" src="https://github.com/MDW-94/arcgis_map/assets/138756503/7668569d-aea3-4298-b028-041788f3b584">
 
+## Description
+ArcGIS Map application showcasing native ArcGIS SDK for Javascript features plus customised widgets developed with HTML and Javascript. A map of the Shetland Isles is displayed with data layers taken from the Esri Living Atlas data collection. The data layer displayed here shows the different slop gradients in the topography of the Shetlands - this is displayed through a swipe widget that the user can control.
 
-- See URL for deployed application
-- For ArcGIS ES Module Build tutorial & example go to https://github.com/MDW-94/arcgis_demo
+The application uses a index.html, the ArcGIS JS API and a script.js. 
+
+Other features include:
+- an innate ArcGIS basemap toggle module plus a customised one I developed to pull in a water colour map (found through the Living Atlas data collection)
+
+- a legend widget describing the feature alyer being paplied to the map ia the swipe widget - this includes information about the data layer plus authorship
   
+- a 2D/3D toggle allowing the user to switch between a vector map and a 3D scene (the scene is a prebuilt 3D GIS scene found whilst browsing through data layer on the Living Atlas site). The scene is a collection of Neolightic sites that can be found in the Shetland isles.
 
-### Setup & Installation
+- a data selection widget - this feature will allow the user to be able to select from a collection of different data feature layers that portray different topographic, meteorological and environmental data about the Shetlands. These feature layers will be rendered within the swipe widget to allow the user to remove the feature layer temporarily whilst navigating through the basemap - still under construction - 
+
+Notes:
+- See URL for deployed application (github pages)
+- For ArcGIS ES Module Build tutorial & example go to https://github.com/MDW-94/arcgis_demo
+
+## Setup & Installation
 
 - pull the project in a chosen directory
 - find index.html file
@@ -64,7 +77,7 @@ The setup of this index.html document will be relatively straightforward and inc
 
 With our basic index.html setup done we can move onto the key features which will run our ArcGIS app alongside how we might begin to customise these features:
 
-#### ArcGIS CSS
+### ArcGIS CSS
 ArcGIS Map application pull CSS configurations from the ArcGIS CDN. These CSS features allow us to customise the widgets inside our map application - these include buttons, swipes and any other UI that we might include.
 
 We need to pull these CSS parameters into our index.html:
@@ -82,7 +95,7 @@ We declare a <link> tag inside our <head> tag and referncing the URL shown above
 
 Note: CSS and the AMD modules will select to inlclude in our application are pulled from the ArcGIS CDN at runtime of the application. This is usual as it means all the dependcies for our application are not stored locally, optimising our application and keeping it lightweight. You can begin to look for further information here in the resources given below.
 
-#### ArcGIS SDK for JS - AMD
+### ArcGIS SDK for JS - AMD
 Just like our CSS we need to pull our modules from the ArcGIS CDN through a link tag. This is a similar process, we define the link tag within the head tag of our index.html:
 
 ```bash
@@ -97,7 +110,7 @@ Note: Include the closing </script> tag is not always necessary but sometimes an
 
 This URL is fetching the version '4.28' for JS from the ArcGIS CDN.
 
-#### script.js
+### script.js
 Now we have the two link tags within our head section of the index.html, we need to create a javscript file to create our AMD modules fetch requests. These AMD modules are like GIS building blocks in this circumstance - we'll get to them later on.
 
 
