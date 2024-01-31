@@ -27,7 +27,7 @@ Other features include:
 
 - a data selection widget - this feature will allow the user to be able to select from a collection of different data feature layers that portray different topographic, meteorological and environmental data about the Shetlands. These feature layers will be rendered within the swipe widget to allow the user to remove the feature layer temporarily whilst navigating through the basemap - under construction - 
 
-Notes:
+Notes
 - See URL for deployed application (github pages)
 - For ArcGIS ES Module Build tutorial & example go to https://github.com/MDW-94/arcgis_demo
 
