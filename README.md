@@ -17,7 +17,7 @@ Other features include:
   
 - a 2D/3D toggle allowing the user to switch between a vector map and a 3D scene (the scene is a prebuilt 3D GIS scene found whilst browsing through data layer on the Living Atlas site). The scene is a collection of Neolightic sites that can be found in the Shetland isles.
 
-- a data selection widget - this feature will allow the user to be able to select from a collection of different data feature layers that portray different topographic, meteorological and environmental data about the Shetlands. These feature layers will be rendered within the swipe widget to allow the user to remove the feature layer temporarily whilst navigating through the basemap - still under construction - 
+- a data selection widget - this feature will allow the user to be able to select from a collection of different data feature layers that portray different topographic, meteorological and environmental data about the Shetlands. These feature layers will be rendered within the swipe widget to allow the user to remove the feature layer temporarily whilst navigating through the basemap - under construction - 
 
 Notes:
 - See URL for deployed application (github pages)
