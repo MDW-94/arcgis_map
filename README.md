@@ -1,9 +1,9 @@
 # 🗾 ArcGIS SDK Javascript (AMD)
 ## ⛰️ Shetland Isles Topography App ⛰️
 
-<img width="900" alt="Screenshot of application" src="https://github.com/MDW-94/arcgis_map/assets/138756503/93f9e320-ddba-4e12-bb80-a5e3db7b1a62">
+<img width="400" alt="Screenshot of application" src="https://github.com/MDW-94/arcgis_map/assets/138756503/93f9e320-ddba-4e12-bb80-a5e3db7b1a62">
 
-<img width="300" alt="Screenshot of application" src="https://github.com/MDW-94/arcgis_map/assets/138756503/a1c529bf-e6b1-4d4d-bbe8-f1923ccda464">
+<img width="300" alt="Screenshot 2024-01-31 at 14 32 33" src="https://github.com/MDW-94/arcgis_map/assets/138756503/3181a9e4-286b-4191-94ef-333cd37d825e">
 
 <img width="300" alt="Screenshot of application" src="https://github.com/MDW-94/arcgis_map/assets/138756503/2db4d276-7be0-48fd-99d6-05571e3089b4">
 
@@ -27,7 +27,7 @@ Notes:
 - See URL for deployed application (github pages)
 - For ArcGIS ES Module Build tutorial & example go to https://github.com/MDW-94/arcgis_demo
 
-<img width="900" alt="Screenshot 2024-01-31 at 13 19 58" src="https://github.com/MDW-94/arcgis_map/assets/138756503/7668569d-aea3-4298-b028-041788f3b584">
+<img width="400" alt="Screenshot 2024-01-31 at 13 19 58" src="https://github.com/MDW-94/arcgis_map/assets/138756503/7668569d-aea3-4298-b028-041788f3b584">
 
 ## Setup & Installation
 
