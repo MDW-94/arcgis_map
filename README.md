@@ -3,7 +3,7 @@
 
 <img width="722" alt="Screenshot 2024-01-31 at 13 20 26" src="https://github.com/MDW-94/arcgis_map/assets/138756503/93f9e320-ddba-4e12-bb80-a5e3db7b1a62">
 
-<img width="724" alt="Screenshot 2024-01-31 at 13 19 58" src="https://github.com/MDW-94/arcgis_map/assets/138756503/7668569d-aea3-4298-b028-041788f3b584">
+
 
 ## Description
 ArcGIS Map application showcasing native ArcGIS SDK for Javascript features plus customised widgets developed with HTML and Javascript. A map of the Shetland Isles is displayed with data layers taken from the Esri Living Atlas data collection. The data layer displayed here shows the different slop gradients in the topography of the Shetlands - this is displayed through a swipe widget that the user can control.
@@ -22,6 +22,8 @@ Other features include:
 Notes:
 - See URL for deployed application (github pages)
 - For ArcGIS ES Module Build tutorial & example go to https://github.com/MDW-94/arcgis_demo
+
+<img width="724" alt="Screenshot 2024-01-31 at 13 19 58" src="https://github.com/MDW-94/arcgis_map/assets/138756503/7668569d-aea3-4298-b028-041788f3b584">
 
 ## Setup & Installation
 
