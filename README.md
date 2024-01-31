@@ -31,7 +31,7 @@ Notes:
 - See URL for deployed application (github pages)
 - For ArcGIS ES Module Build tutorial & example go to https://github.com/MDW-94/arcgis_demo
 
-<img width="400" alt="Screenshot 2024-01-31 at 13 19 58" src="https://github.com/MDW-94/arcgis_map/assets/138756503/7668569d-aea3-4298-b028-041788f3b584">
+<img width="600" alt="Screenshot 2024-01-31 at 13 19 58" src="https://github.com/MDW-94/arcgis_map/assets/138756503/7668569d-aea3-4298-b028-041788f3b584">
 
 ## Setup & Installation
 
