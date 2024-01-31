@@ -1,7 +1,7 @@
 # 🗾 ArcGIS SDK Javascript (AMD)
 ## ⛰️ Shetland Isles Topography App ⛰️
 
-<img width="600" alt="Screenshot of application" src="https://github.com/MDW-94/arcgis_map/assets/138756503/93f9e320-ddba-4e12-bb80-a5e3db7b1a62">
+<img width="900" alt="Screenshot of application" src="https://github.com/MDW-94/arcgis_map/assets/138756503/93f9e320-ddba-4e12-bb80-a5e3db7b1a62">
 
 <img width="300" alt="Screenshot of application" src="https://github.com/MDW-94/arcgis_map/assets/138756503/a1c529bf-e6b1-4d4d-bbe8-f1923ccda464">
 
