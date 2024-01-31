@@ -250,6 +250,8 @@ We use require() to make the request to the ArcGIC CDN, passing in the parameter
 
 ArcGIS Developer keys are free and necessary for accessing certain features of ArcGIS CDNs. By signing up you can then recieve a free key and access to data feature layers as well as premade maps and even customise your own.
 
+You can now right click on the index.html and selector "Show in Browser" to see your ArcGIS Map integrated into your web application.
+
 #### That's it! 🗺️
 And that's a basic ArcGIS SDK for Javascript Map Application using a AMD Modules build. The Shetland Isle application has a few examples of the other features that ArcGIS has to offer - by reading the documentation provided by Esri you can start to understand, create and implement your own features within a GIS application.
 
